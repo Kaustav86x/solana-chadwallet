@@ -47,12 +47,14 @@ export default function PrivyProvider({
 
         // Auto-create embedded Solana wallet on first login
         embeddedWallets: {
-          createOnLogin: 'users-without-wallets',
-          noPromptOnSignature: false,
+          solana: {
+            createOnLogin: 'users-without-wallets',
+          },
         },
 
         // Default to Solana mainnet
         // The RPC URL here is Alchemy — set NEXT_PUBLIC_ALCHEMY_SOLANA_RPC in .env.local
+        // NOTE: 'solanaClusters' isn't a known property on PrivyClientConfig — cast to any to allow custom cluster config
         solanaClusters: [
           {
             name: 'mainnet-beta',
@@ -61,7 +63,7 @@ export default function PrivyProvider({
               'https://api.mainnet-beta.solana.com',
           },
         ],
-      }}
+      } as any}
     >
       {children}
     </Privy>

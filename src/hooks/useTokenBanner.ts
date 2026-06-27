@@ -8,6 +8,10 @@ export interface BannerToken {
   symbol: string;
   price: number;
   change_24h: number;
+  name?: string;
+  image_url?: string;
+  market_cap?: number;
+  volume_24h?: number;
 }
 
 export function useTokenBanner() {

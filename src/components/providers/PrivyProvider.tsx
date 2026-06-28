@@ -1,6 +1,7 @@
 'use client';
 
 import { PrivyProvider as Privy } from '@privy-io/react-auth';
+import lightlogo from '../../../public/assests/light.png';
 
 /**
  * ChadWallet Privy configuration
@@ -9,21 +10,18 @@ import { PrivyProvider as Privy } from '@privy-io/react-auth';
  *   1. Enable login methods: Google, Apple
  *   2. Enable Solana embedded wallets
  *   3. Add your domain to allowed origins
- *
- * Env vars needed in .env.local:
- *   PRIVY_APP_ID=your_privy_app_id
  */
 export default function PrivyProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const appId = process.env.PRIVY_APP_ID;
+  const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
 
   if (!appId) {
     // In dev without an App ID, render children without auth
     console.warn(
-      '[ChadWallet] PRIVY_APP_ID is not set. Auth is disabled.'
+      '[ChadWallet] NEXT_PUBLIC_PRIVY_APP_ID is not set. Auth is disabled.'
     );
     return <>{children}</>;
   }
@@ -39,7 +37,7 @@ export default function PrivyProvider({
         appearance: {
           theme: 'dark',
           accentColor: '#22C55E',
-          logo: '/assets/light.png',
+          logo: lightlogo,
           landingHeader: 'Sign in to ChadWallet',
           loginMessage: 'Trade memecoins like a chad.',
           walletChainType: 'solana-only',
@@ -53,13 +51,13 @@ export default function PrivyProvider({
         },
 
         // Default to Solana mainnet
-        // The RPC URL here is Alchemy — set ALCHEMY_SOLANA_RPC in .env.local
+        // The RPC URL here is Alchemy — set NEXT_PUBLIC_ALCHEMY_SOLANA_RPC in .env.local
         // NOTE: 'solanaClusters' isn't a known property on PrivyClientConfig — cast to any to allow custom cluster config
         solanaClusters: [
           {
             name: 'mainnet-beta',
             rpcUrl:
-              process.env.ALCHEMY_SOLANA_RPC ||
+              process.env.NEXT_PUBLIC_ALCHEMY_SOLANA_RPC ||
               'https://api.mainnet-beta.solana.com',
           },
         ],

@@ -11,23 +11,24 @@ declare global {
 export default function SwapPanel({ mint }: { mint: string }) {
   const [mode, setMode] = useState<'buy' | 'sell'>('buy');
 
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://terminal.jup.ag/main-v3.js';
-    script.onload = () => {
-      if (window.Jupiter) {
-        window.Jupiter.init({
-          displayMode: 'integrated',
-          integratedTargetId: 'jupiter-terminal',
-          endpoint: process.env.ALCHEMY_SOLANA_RPC,
-          defaultExplorer: 'Solana Explorer',
-          initialInputMint: 'So11111111111111111111111111111111111111112', // SOL
-          initialOutputMint: mint,
-        });
-      }
-    };
-    document.body.appendChild(script);
-  }, [mint]);
+//   useEffect(() => {
+//     const script = document.createElement('script');
+//     // depricated 
+//     script.src = 'https://terminal.jup.ag/main-v3.js'; 
+//     script.onload = () => {
+//       if (window.Jupiter) {
+//         window.Jupiter.init({
+//           displayMode: 'integrated',
+//           integratedTargetId: 'jupiter-terminal',
+//           endpoint: process.env.NEXT_PUBLIC_ALCHEMY_SOLANA_RPC,
+//           defaultExplorer: 'Solana Explorer',
+//           initialInputMint: 'So11111111111111111111111111111111111111112', // SOL
+//           initialOutputMint: mint,
+//         });
+//       }
+//     };
+//     document.body.appendChild(script);
+//   }, [mint]);
 
   return (
     <div className="flex flex-col w-full p-4 rounded-2xl border" style={{ backgroundColor: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
@@ -63,7 +64,29 @@ export default function SwapPanel({ mint }: { mint: string }) {
         </button>
       </div>
       
-      <div id="jupiter-terminal" className="flex-1 rounded-xl overflow-hidden min-h-[400px] w-full" />
+      <div className="flex-1 min-h-[400px] rounded-xl flex items-center justify-center"
+        style={{
+        backgroundColor: "var(--color-elevated)",
+        border: "1px dashed var(--color-border)",
+        }}
+    >
+    <div className="text-center">
+        <h3 className="text-lg font-bold text-white mb-2">
+        Jupiter Swap
+        </h3>
+
+        <p style={{ color: "var(--color-muted)" }}>
+        Swap integrations are temporarily disabled.
+        </p>
+
+        <p
+        className="text-xs mt-2"
+        style={{ color: "var(--color-dim)" }}
+        >
+        Ready for Jupiter V6 / Ultra API integration.
+        </p>
+    </div>
+    </div>
     </div>
   );
 }

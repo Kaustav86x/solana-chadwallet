@@ -109,7 +109,7 @@ export default function Hero() {
             </a>
 
             <Link
-              href="/trade"
+              href="/trade/So11111111111111111111111111111111111111112"
               className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-black transition-colors"
               style={{ backgroundColor: 'var(--color-green)' }}
               onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) =>
@@ -123,7 +123,7 @@ export default function Hero() {
             </Link>
           </div>
 
-          {/* Stats row */}
+          {/* Stats */}
           <div className="flex gap-6 items-center">
             {STATS.map((stat, i) => (
               <div key={stat.label} className="flex items-center gap-6">
@@ -189,7 +189,7 @@ export default function Hero() {
               >
                 <span>⚡ Live</span>
                 <span>👥 KOLs</span>
-                <span># Memecoin</span>
+                <span>🪙 Memecoin</span>
                 <span
                   className="font-semibold"
                   style={{ color: 'var(--color-green)' }}
@@ -239,7 +239,7 @@ export default function Hero() {
               >
                 {[
                   { icon: '🏠', label: 'Home', active: true },
-                  { icon: '✨', label: 'Memes', active: false },
+                  { icon: '🤪', label: 'Memes', active: false },
                   { icon: '🔍', label: 'Discover', active: false },
                   { icon: '👤', label: 'Account', active: false },
                 ].map((item) => (

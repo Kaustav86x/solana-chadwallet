@@ -27,13 +27,16 @@ export default async function TradePage({ params }: TradePageProps) {
             <PriceChart mint={tokenMint} />
           </div>
           
-          {/* Live Trades Tab - Placeholder for future Codex websocket injection */}
-          <div className="w-full h-[300px] rounded-2xl border p-4 flex flex-col" style={{ backgroundColor: 'var(--color-card)', borderColor: 'var(--color-border)' }}>
-            <h3 className="text-sm font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--color-muted)' }}>Live Trades</h3>
-            <div className="flex-1 flex items-center justify-center border border-dashed rounded-lg" style={{ borderColor: 'var(--color-border)', color: 'var(--color-dim)' }}>
-              [Codex.io Live Trades WebSocket Feed]
-            </div>
-          </div>
+          <div className="flex-1 rounded-lg border border-dashed flex flex-col items-center justify-center" style={{ borderColor: 'var(--color-border)', color: 'var(--color-dim)' }}>
+          <div className="text-4xl mb-3">📡</div>
+        <h3 className="text-lg font-semibold text-white">
+        Live Trades
+        </h3>
+
+        <p className="text-sm mt-2 max-w-xs text-center">
+        Real-time Codex WebSocket stream will appear here once connected.
+        </p>
+        </div>
         </section>
 
         {/* Right Panel: Execution (Jupiter) */}

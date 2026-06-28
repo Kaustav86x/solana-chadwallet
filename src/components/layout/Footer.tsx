@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import lightlogo from '../../../public/assests/light.png';
 
 export default function Footer() {
   return (
@@ -12,7 +13,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2.5 mb-3">
-              <Image src="/assets/light.png" alt="ChadWallet" width={24} height={24} className="object-contain" />
+              <Image src={lightlogo} alt="ChadWallet" width={24} height={24} className="rounded-md object-contain" />
               <span className="text-white font-bold">ChadWallet</span>
             </div>
             <p className="text-sm max-w-xs leading-relaxed" style={{ color: 'var(--color-muted)' }}>
@@ -25,7 +26,8 @@ export default function Footer() {
             <div>
               <div className="text-white font-semibold mb-4">Product</div>
               <div className="flex flex-col gap-3" style={{ color: 'var(--color-muted)' }}>
-                <Link href="/trade" className="hover:text-white transition-colors">Trade</Link>
+              {/* using the official Mint address for Wrapped SOL */}
+                <Link href="/trade/So11111111111111111111111111111111111111112" className="hover:text-white transition-colors">Trade</Link>
                 <a
                   href="https://apps.apple.com/us/app/chadwallet/id6757367474"
                   target="_blank"

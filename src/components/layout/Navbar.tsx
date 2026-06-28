@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import AuthButton from '@/components/shared/AuthButton';
+import lightlogo from '../../../public/assests/light.png';
 
 export default function Navbar() {
   return (
@@ -14,11 +15,11 @@ export default function Navbar() {
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2.5">
         <Image
-          src="/assets/light.png"
-          alt="ChadWallet"
+          src={lightlogo}
+          alt="Chadlogo"
           width={32}
           height={32}
-          className="object-contain"
+          className="rounded-md object-contain"
         />
         <span className="text-white font-bold text-lg tracking-tight">
           ChadWallet
@@ -34,7 +35,8 @@ export default function Navbar() {
           Home
         </Link>
         <Link
-          href="/trade"
+        // {/* using the official Mint address for Wrapped SOL */}
+          href="/trade/So11111111111111111111111111111111111111112"
           className="transition-colors hover:text-white"
         >
           Trade

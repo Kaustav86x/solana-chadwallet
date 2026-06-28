@@ -1,27 +1,18 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-
-// Mock token data — replaced with live Codex.io data on Day 2
-const MOCK_TOKENS = [
-  { symbol: 'BONK',     price: '$0.00002', change: '+12.4%', positive: true,  mint: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263', emoji: '🐶' },
-  { symbol: 'WIF',      price: '$2.84',    change: '+5.2%',  positive: true,  mint: 'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm', emoji: '🎩' },
-  { symbol: 'POPCAT',   price: '$0.43',    change: '-3.1%',  positive: false, mint: '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr', emoji: '🐱' },
-  { symbol: 'MOODENG',  price: '$0.17',    change: '+28.9%', positive: true,  mint: 'ED5nyyWEzpPPiWimP8vYm7sD7TD3LAt3Q3gRTWHzc8yy', emoji: '🦛' },
-  { symbol: 'GOAT',     price: '$0.31',    change: '+8.7%',  positive: true,  mint: 'CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump', emoji: '🐐' },
-  { symbol: 'PNUT',     price: '$0.62',    change: '-12.3%', positive: false, mint: '2qEHjDLDLbuBgRYvsxhc5D6uDWAivNFZGan56P1tpump', emoji: '🐿️' },
-  { symbol: 'FARTCOIN', price: '$0.89',    change: '+44.2%', positive: true,  mint: '9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump', emoji: '💨' },
-  { symbol: 'DUMB',     price: '$0.0029',  change: '+26.7%', positive: true,  mint: 'DUMBxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', emoji: '🤡' },
-  { symbol: 'TROLL',    price: '$0.02',    change: '+4.1%',  positive: true,  mint: 'TROLLxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', emoji: '👺' },
-  { symbol: 'BELIEF',   price: '$0.02',    change: '+14.5%', positive: true,  mint: 'BELIEFxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', emoji: '✨' },
-];
+import Image from 'next/image';
+import { useTokenBanner, BannerToken } from '@/hooks/useTokenBanner';
 
 interface TokenPillProps {
-  token: (typeof MOCK_TOKENS)[0];
+  token: BannerToken;
   onClick: () => void;
 }
 
 function TokenPill({ token, onClick }: TokenPillProps) {
+  // Compute if the change is positive based on the real number
+  const isPositive = (token.change_24h || 0) >= 0;
+
   return (
     <button
       onClick={onClick}
@@ -37,16 +28,24 @@ function TokenPill({ token, onClick }: TokenPillProps) {
         e.currentTarget.style.borderColor = 'var(--color-border)';
       }}
     >
-      <span className="text-base leading-none">{token.emoji}</span>
+      {/* Real images from API, with a fallback emoji if missing */}
+      {token.image_url ? (
+        <Image src={token.image_url} alt={token.symbol} width={24} height={24} className="rounded-full" />
+      ) : (
+        <span className="text-base leading-none">🪙</span>
+      )}
+      
       <span className="text-white font-semibold text-sm">{token.symbol}</span>
+      
       <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
-        {token.price}
+        ${token.price ? token.price.toFixed(4) : '0.00'}
       </span>
+      
       <span
         className="text-xs font-medium"
-        style={{ color: token.positive ? 'var(--color-green)' : 'var(--color-red)' }}
+        style={{ color: isPositive ? 'var(--color-green)' : 'var(--color-red)' }}
       >
-        {token.change}
+        {isPositive ? '▲' : '▼'} {Math.abs(token.change_24h || 0).toFixed(2)}%
       </span>
     </button>
   );
@@ -58,9 +57,21 @@ interface TokenBannerProps {
 
 export default function TokenBanner({ direction = 'left' }: TokenBannerProps) {
   const router = useRouter();
+  
+  // HOOK MUST BE INSIDE THE COMPONENT
+  const { tokens, loading } = useTokenBanner();
 
-  // Quadruple the array so the seamless loop never shows a gap
-  const tokens = [...MOCK_TOKENS, ...MOCK_TOKENS, ...MOCK_TOKENS, ...MOCK_TOKENS];
+  // Don't render the marquee if it's still loading or empty to prevent layout breaking
+  if (loading || tokens.length === 0) {
+    return (
+      <div className="border-y py-3 h-[60px] flex items-center justify-center" style={{ borderColor: 'var(--color-border)' }}>
+        <span className="text-sm animate-pulse" style={{ color: 'var(--color-muted)' }}>Loading live markets...</span>
+      </div>
+    );
+  }
+
+  // Repeating the array so the seamless loop never leaves a gap
+  const infitokens = [...tokens, ...tokens, ...tokens, ...tokens];
 
   return (
     <div
@@ -68,9 +79,9 @@ export default function TokenBanner({ direction = 'left' }: TokenBannerProps) {
       style={{ borderColor: 'var(--color-border)' }}
     >
       <div className={`flex ${direction === 'left' ? 'marquee-left' : 'marquee-right'}`}>
-        {tokens.map((token, i) => (
+        {infitokens.map((token, i) => (
           <TokenPill
-            key={`${token.symbol}-${i}`}
+            key={`${token.mint}-${i}`} // Use mint + index for a truly unique key
             token={token}
             onClick={() => router.push(`/trade/${token.mint}`)}
           />

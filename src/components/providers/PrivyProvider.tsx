@@ -1,0 +1,69 @@
+'use client';
+
+import { PrivyProvider as Privy } from '@privy-io/react-auth';
+import lightlogo from '../../../public/assests/light.png';
+
+/**
+ * Solscope Privy configuration
+ *
+ * Prerequisites (Privy dashboard → your app):
+ *   1. Enable login methods: Google
+ *   2. Enable Solana embedded wallets
+ *   3. Add your domain to allowed origins
+ */
+export default function PrivyProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
+
+  if (!appId) {
+    // In dev without an App ID, render children without auth
+    console.warn(
+      '[Solscope] NEXT_PUBLIC_PRIVY_APP_ID is not set. Auth is disabled.'
+    );
+    return <>{children}</>;
+  }
+
+  return (
+    <Privy
+      appId={appId}
+      config={{
+        // Sign-in methods
+        loginMethods: ['google'],
+
+        // Branding
+        appearance: {
+          theme: 'dark',
+          accentColor: '#22C55E',
+          logo: lightlogo,
+          landingHeader: 'Sign in to Solscope',
+          loginMessage: 'Your lens on Solana.',
+          walletChainType: 'solana-only',
+        },
+
+        // Auto-create embedded Solana wallet on first login
+        embeddedWallets: {
+          solana: {
+            createOnLogin: 'users-without-wallets',
+          },
+        },
+
+        // Default to Solana mainnet
+        // The RPC URL here is Alchemy — set NEXT_PUBLIC_ALCHEMY_SOLANA_RPC in .env.local
+        // NOTE: 'solanaClusters' isn't a known property on PrivyClientConfig — cast to any to allow custom cluster config
+        solanaClusters: [
+          {
+            name: 'mainnet-beta',
+            rpcUrl:
+              process.env.NEXT_PUBLIC_ALCHEMY_SOLANA_RPC ||
+              'https://api.mainnet-beta.solana.com',
+          },
+        ],
+      } as any}
+    >
+      {children}
+    </Privy>
+  );
+}
